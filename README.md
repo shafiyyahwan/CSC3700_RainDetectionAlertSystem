@@ -25,6 +25,7 @@ Data retrieval for analysis
 <img src="images/CircuitDiagram.png" alt="System Diagram" width="500">  
 Circuit diagram created using Wokwi  
 
+
 <img src="images/Demo.png" alt="System Diagram" width="500">  
 System demonstration via Terminal Monitor  
 

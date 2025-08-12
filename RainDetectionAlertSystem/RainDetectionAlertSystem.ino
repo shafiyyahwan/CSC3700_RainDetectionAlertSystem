@@ -1,39 +1,39 @@
 // Libraries
 #include <Servo.h>         // Control servo motor
-#include <Wire.h>           // I2C communication
+#include <Wire.h>          // I2C communication
 #include "RTClib.h"        // Real-time clock library
-#include <EEPROM.h>  // Store data in EEPROM
+#include <EEPROM.h>        // Store data in EEPROM
 
 // Pin configuration
-const int potPin = A0;         // Rain sensor input
-const int ledPin = 11;          // LED alert pin
-const int buzzerPin = 12;    // Buzzer alert pin
-const int servoPin = 3;        // Servo motor pin
+const int potPin    = A0;   // Rain sensor input
+const int ledPin    = 11;   // LED alert pin
+const int buzzerPin = 12;   // Buzzer alert pin
+const int servoPin  = 3;    // Servo motor pin
 
-const int threshold = 600;      // Rain detection threshold
+const int threshold = 600;  // Rain detection threshold
 
 // EEPROM configuration
-const int addr_eventCount = 0;      // Address for event count
-const int addr_events_start = 1;     // First event starts at this address
-const int eventSize = 10;                // Bytes used per event
+const int addr_eventCount   = 0;  // Address for event count
+const int addr_events_start = 1;  // First event starts at this address
+const int eventSize         = 10; // Bytes used per event
 
 // Modules and state
-Servo myServo;                // Servo motor instance
-RTC_DS3231 rtc;             // RTC module instance
-bool triggered = false;      // Rain trigger flag
-char status = 'L';               // Current rain status
-char lastStatus = 'L';         // Last known rain status
+Servo myServo;           // Servo motor instance
+RTC_DS3231 rtc;          // RTC module instance
+bool triggered   = false; // Rain trigger flag
+char status      = 'L';   // Current rain status
+char lastStatus  = 'L';   // Last known rain status
 
-DateTime rainStartTime;      // Time rain started
-DateTime rainStopTime;      // Time rain stopped
+DateTime rainStartTime;   // Time rain started
+DateTime rainStopTime;    // Time rain stopped
 
 void setup() {
-  pinMode(ledPin, OUTPUT);          // Set LED as output
+  pinMode(ledPin, OUTPUT);       // Set LED as output
   pinMode(buzzerPin, OUTPUT);    // Set buzzer as output
-  pinMode(potPin, INPUT);             // Set rain sensor as input
-  myServo.attach(servoPin);            // Attach servo to pin
-  Serial.begin(9600);                        // Begin serial communication
-  myServo.write(90);                       // Set to open position
+  pinMode(potPin, INPUT);        // Set rain sensor as input
+  myServo.attach(servoPin);      // Attach servo to pin
+  Serial.begin(9600);            // Begin serial communication
+  myServo.write(90);             // Set to open position
 
   Wire.begin();                   // Start I2C communication
   if (!rtc.begin()) {
@@ -47,36 +47,36 @@ void loop() {
   int potValue = analogRead(potPin); // Read rain sensor
 
   // Determine rain level based on sensor value
-  if (potValue < 300) status = 'H';             // Heavy
-  else if (potValue < 400) status = 'M';     // Moderate
-  else if (potValue < 600) status = 'L';      // Light
-  else status = 'S';                                     // Stopped
+  if      (potValue < 300) status = 'H'; // Heavy
+  else if (potValue < 400) status = 'M'; // Moderate
+  else if (potValue < 600) status = 'L'; // Light
+  else                     status = 'S'; // Stopped
 
   // New rain detected
   if (potValue < threshold && !triggered) {
     triggered = true;
-    DateTime now = rtc.now();  // Get current time from RTC
-    saveNewRainEvent(now);   // Save new rain record
-    alertSequence();                   // Trigger alert
-    myServo.write(0);                // Close cover
+    DateTime now = rtc.now();    // Get current time from RTC
+    saveNewRainEvent(now);       // Save new rain record
+    alertSequence();             // Trigger alert
+    myServo.write(0);            // Close cover
     delay(500);
-    lastStatus = status;               // Update last status
+    lastStatus = status;         // Update last status
   }
 
   // If rain intensity changes
   else if (triggered && status != lastStatus) {
     DateTime now = rtc.now();
-    saveStatusUpdate(now);   // Save update to EEPROM
+    saveStatusUpdate(now);       // Save update to EEPROM
 
     if (potValue < threshold) {
       lastStatus = status;
     } else {
       triggered = false;         // Rain stopped
-      myServo.write(90);     // Reopen cover
+      myServo.write(90);         // Reopen cover
       delay(500);
     }
   }
-  delay(5000);      // Pause 5 seconds before restarting rain detection loop
+  delay(5000); // Pause 5 seconds before restarting rain detection loop
 }
 
 void alertSequence() {
@@ -94,7 +94,7 @@ void alertSequence() {
 // Save new rain event details in EEPROM
 void saveNewRainEvent(DateTime now) {
   rainStartTime = now;
-  int count = EEPROM.read(addr_eventCount);
+  int count     = EEPROM.read(addr_eventCount);
   int maxEvents = (EEPROM.length() - addr_events_start) / eventSize;
 
   if (count >= maxEvents) {
@@ -105,7 +105,7 @@ void saveNewRainEvent(DateTime now) {
   int addr = addr_events_start + count * eventSize;
 
   // Store timestamp and status
-  EEPROM.write(addr, now.day());
+  EEPROM.write(addr,     now.day());
   EEPROM.write(addr + 1, now.month());
   EEPROM.write(addr + 2, now.year() - 2000);
   EEPROM.write(addr + 3, now.hour());
@@ -130,10 +130,10 @@ void saveNewRainEvent(DateTime now) {
 // Update last event status and duration
 void saveStatusUpdate(DateTime now) {
   int count = EEPROM.read(addr_eventCount);
-  int addr = addr_events_start + (count - 1) * eventSize;
+  int addr  = addr_events_start + (count - 1) * eventSize;
 
   // Overwrite event with new status/time
-  EEPROM.write(addr, now.day());
+  EEPROM.write(addr,     now.day());
   EEPROM.write(addr + 1, now.month());
   EEPROM.write(addr + 2, now.year() - 2000);
   EEPROM.write(addr + 3, now.hour());
@@ -157,10 +157,10 @@ void printRainEvent(int count) {
   int addr = addr_events_start + (count - 1) * eventSize;
 
   // Read stored timestamp and status
-  byte day = EEPROM.read(addr);
-  byte month = EEPROM.read(addr + 1);
-  byte year = EEPROM.read(addr + 2);
-  byte hour = EEPROM.read(addr + 3);
+  byte day    = EEPROM.read(addr);
+  byte month  = EEPROM.read(addr + 1);
+  byte year   = EEPROM.read(addr + 2);
+  byte hour   = EEPROM.read(addr + 3);
   byte minute = EEPROM.read(addr + 4);
   byte second = EEPROM.read(addr + 5);
   char rainStatus = EEPROM.read(addr + 6);
@@ -196,11 +196,8 @@ void printRainEvent(int count) {
 // Convert status char to text
 void printStatus(char rainStatus) {
   Serial.print(" - Status: ");
-  if (rainStatus == 'L') Serial.println("Light Rain");
+  if      (rainStatus == 'L') Serial.println("Light Rain");
   else if (rainStatus == 'M') Serial.println("Moderate Rain");
   else if (rainStatus == 'H') Serial.println("Heavy Rain");
   else if (rainStatus == 'S') Serial.println("Rain Stopped");
 }
-
-
-

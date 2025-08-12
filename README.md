@@ -23,11 +23,10 @@ Data retrieval for analysis
 - EEPROM (built-in on Arduino Uno)
 
 <img src="images/CircuitDiagram.png" alt="System Diagram" width="500">  
-Circuit diagram created using Wokwi  
-
-
+<p>Circuit diagram created using Wokwi</p>
+<br>
 <img src="images/Demo.png" alt="System Diagram" width="500">  
-System demonstration via Terminal Monitor  
+<p>System demonstration via Terminal Monitor</p>
 
 
 

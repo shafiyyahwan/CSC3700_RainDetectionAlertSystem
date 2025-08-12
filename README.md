@@ -22,7 +22,7 @@ Data retrieval for analysis
 - Buzzer
 - EEPROM (built-in on Arduino Uno)
 
-<img src="Images/Circuit Diagram" alt="System Diagram" width="400">
+<img src="images/CircuitDiagram.png" alt="System Diagram" width="300">
 
 
 

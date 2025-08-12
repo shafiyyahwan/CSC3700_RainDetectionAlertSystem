@@ -14,12 +14,12 @@ Calculation of rain duration (start time, stop time, total duration)
 Data retrieval for analysis
 
 ## 🛠 Hardware Components
-Arduino Uno
-RTC DS3231 (Real-Time Clock)
-Rain Sensor Module
-Servo Motor
-LED Indicator
-Buzzer
-EEPROM (built-in on Arduino Uno)
+- Arduino Uno
+- RTC DS3231 (Real-Time Clock)
+- Rain Sensor Module
+- Servo Motor
+- LED Indicator
+- Buzzer
+- EEPROM (built-in on Arduino Uno)
 
 

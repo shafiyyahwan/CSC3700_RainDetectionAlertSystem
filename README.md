@@ -22,11 +22,12 @@ Data retrieval for analysis
 - Buzzer
 - EEPROM (built-in on Arduino Uno)
 
-<img src="images/CircuitDiagram.png" alt="System Diagram" width="500">
-Circuit diagram made using Wokwi
+<img src="images/CircuitDiagram.png" alt="System Diagram" width="500">  
+Circuit diagram created using Wokwi  
 
-<img src="images/Demo.png" alt="System Diagram" width="500">
-System demonstration through terminal monitor
+<img src="images/Demo.png" alt="System Diagram" width="500">  
+System demonstration via Terminal Monitor  
+
 
 
 

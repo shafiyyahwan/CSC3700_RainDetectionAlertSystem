@@ -1,4 +1,4 @@
-# Rain Alert and Detection System for Laundry
+# Rain Detection and Alert System for Laundry
 
 ## 📌 Project Overview
 This is an Arduino-based project developed as part of the **CSC3700 Embedded System Programming** course.  

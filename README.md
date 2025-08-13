@@ -27,7 +27,9 @@ Data retrieval for analysis
 <br>
 <img src="images/Demo.png" alt="System Diagram" width="500">  
 <p>System demonstration via Terminal Monitor</p>
-
+<br>
+<img src="images/DataRetrieve.png" alt="System Diagram" width="500">  
+<p>Data Retrieval table</p>
 
 
 
